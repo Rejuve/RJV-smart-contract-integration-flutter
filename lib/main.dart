@@ -1,38 +1,42 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_web3/homepage.dart';
+import 'package:flutter_web3/provider/balance_provider.dart';
+import 'package:flutter_web3/provider/total_supply_provider.dart';
+import 'package:flutter_web3/provider/user_provider.dart';
+import 'package:flutter_web3/view/splash_screen/splash_screen.dart';
+import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+import 'services/service.dart';
+import 'services/smart_contract_utils.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+// This is our global ServiceLocator
+GetIt getIt = GetIt.instance;
 
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a blue toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+Future<void> main() async {
+  getIt.registerSingleton<EthereumUtils>(EthereumUtils(), signalsReady: true);
+  getIt.registerSingleton<Service>(Service(), signalsReady: true);
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<TotalSupplyProvider>(
+          create: (_) => TotalSupplyProvider(),
+        ),
+        ChangeNotifierProvider<BalanceProvider>(
+          create: (_) => BalanceProvider(),
+        ),
+        ChangeNotifierProvider<UserProvider>(
+          create: (_) => UserProvider(),
+        ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Rejuve Longevity App',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        home: SplashScreen(),
       ),
-      home: const MyHomePage(),
-    );
-  }
+    ),
+  );
 }

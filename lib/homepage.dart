@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_web3/view/login/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web3auth_flutter/enums.dart';
 import 'package:web3auth_flutter/input.dart';
@@ -8,7 +9,7 @@ import 'package:web3auth_flutter/web3auth_flutter.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:http/http.dart' as http;
 
-import 'smart_contract_utils.dart';
+import 'services/smart_contract_utils.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -137,4 +138,6 @@ class _MyHomePageState extends State<MyHomePage> {
           child: const Text('Initialize Smart Contract'))
     ])));
   }
+
+ 
 }
